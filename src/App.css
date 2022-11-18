@@ -1,0 +1,23 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+.App {
+  text-align: center;
+  font-size: medium;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+button {
+  margin: 2px;
+}
+
+.container {
+  width: 60%;
+  margin: 0 auto;
+}
+
+.btn-kawa {
+  background-color: #d63384;
+}

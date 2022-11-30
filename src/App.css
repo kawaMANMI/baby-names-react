@@ -22,7 +22,7 @@ button {
   background-color: #d63384;
 }
 
-.liveSearch,
+.liveSearch
 .favouritesContainer {
-  margin: 1em 0;
+  margin: 1em 1em;
 }

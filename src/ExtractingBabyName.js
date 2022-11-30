@@ -8,7 +8,7 @@ export default function ExtractingBabyName() {
   //   var babyNameSorted = [];
   //   babyNameData.forEach((elm) => babyNameSorted.push(elm.name));
   //   babyNameSorted.sort();
-    const [babyNamesArray, setBabyNamesArray] = useState(babyNamesData);
+  const [babyNamesArray, setBabyNamesArray] = useState(babyNamesData);
 
   babyNamesArray.sort((a, b) => {
     let fa = a.name.toLowerCase(),
@@ -25,9 +25,10 @@ export default function ExtractingBabyName() {
 
   const [valueSearch, setValueSearch] = useState("");
   const [favouritesArray, setFavouritesArray] = useState([]);
+  const [filterGender, setFilterGender] = useState("");
 
   const symbolGender = (gender) => {
-    return gender === "f" ? <GenderMale /> : <GenderFemale />;
+    return gender === "m" ? <GenderMale /> : <GenderFemale />;
   };
 
   const classNameGender = (gender) => {
@@ -37,12 +38,16 @@ export default function ExtractingBabyName() {
   function onChangeHandler(event) {
     // console.log(event.target.value);
     setValueSearch(event.target.value);
-    // console.log(valueSearch);
-    setBabyNamesArray(
-      babyNamesData.filter((babyElm) =>
-        babyElm.name.toLowerCase().includes(event.target.value.toLowerCase())
-      )
+
+    const temArray = babyNamesData.filter(
+      (babyElm) => babyElm.sex === filterGender || filterGender === ""
     );
+    setBabyNamesArray([
+      ...temArray.filter((babyElm) =>
+        babyElm.name.toLowerCase().includes(event.target.value.toLowerCase())
+      ),
+    ]);
+    // console.log(babyNamesArray.length, temArray.length, event.target.value);
   }
 
   const handleFavourite = (index) => {
@@ -58,15 +63,30 @@ export default function ExtractingBabyName() {
   };
 
   const handleReturnFavourite = (index) => {
-     const returnFavouriteBabyName = favouritesArray[index];
+    const returnFavouriteBabyName = favouritesArray[index];
 
     setFavouritesArray(
       favouritesArray.filter((babyData) => babyData !== favouritesArray[index])
     );
 
-     babyNamesArray.push(returnFavouriteBabyName);
-     setBabyNamesArray([...babyNamesArray]);
+    babyNamesArray.push(returnFavouriteBabyName);
+    setBabyNamesArray([...babyNamesArray]);
     // console.log(favouritesArray);
+  };
+
+  const getRadioValue = (event) => {
+    setFilterGender(event.target.value);
+    if (event.target.value !== "")
+      setBabyNamesArray(
+        babyNamesData.filter(
+          (babyData) => babyData.sex === event.target.value
+          // &&
+          // !favouritesArray.includes(babyData)
+        )
+      );
+    else {
+      setBabyNamesArray([...babyNamesData]);
+    }
   };
   return (
     <div className="container">
@@ -77,6 +97,28 @@ export default function ExtractingBabyName() {
           onChange={onChangeHandler}
           placeholder="Type something to search"
         />
+        <input
+          type="radio"
+          className="btn-check"
+          name="btnradio"
+          id="btnradio1"
+          value="m"
+          onClick={getRadioValue}
+        />
+        <label className="btn btn-outline-primary" for="btnradio1">
+          {symbolGender("m")}
+        </label>
+        <input
+          type="radio"
+          className="btn-check"
+          name="btnradio"
+          onClick={getRadioValue}
+          value="f"
+          id="btnradio2"
+        />
+        <label className="btn btn-outline-primary" for="btnradio2">
+          {symbolGender("f")}
+        </label>
       </div>
       {/* < favouritesArray={favouritesArray} /> */}
       <div className="favouritesContainer">

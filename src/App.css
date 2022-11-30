@@ -21,3 +21,8 @@ button {
 .btn-kawa {
   background-color: #d63384;
 }
+
+.liveSearch,
+.favouritesContainer {
+  margin: 1em 0;
+}

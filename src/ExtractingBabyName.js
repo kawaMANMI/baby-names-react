@@ -25,7 +25,9 @@ export default function ExtractingBabyName() {
 
   const [valueSearch, setValueSearch] = useState("");
   const [favouritesArray, setFavouritesArray] = useState([]);
-  const [filterGender, setFilterGender] = useState("");
+  const [favouritesArrayFilter, setFavouritesArrayFilter] = useState([]);
+
+  const [filterGender, setFilterGender] = useState();
 
   const symbolGender = (gender) => {
     return gender === "m" ? <GenderMale /> : <GenderFemale />;
@@ -76,7 +78,7 @@ export default function ExtractingBabyName() {
 
   const getRadioValue = (event) => {
     setFilterGender(event.target.value);
-    if (event.target.value !== "")
+    if (event.target.value !== "") {
       setBabyNamesArray(
         babyNamesData.filter(
           (babyData) => babyData.sex === event.target.value
@@ -84,9 +86,32 @@ export default function ExtractingBabyName() {
           // !favouritesArray.includes(babyData)
         )
       );
-    else {
+      setFavouritesArrayFilter(
+        favouritesArray.filter((elm) => elm.sex === event.target.value)
+      );
+    } else {
       setBabyNamesArray([...babyNamesData]);
     }
+  };
+
+  const FavouriteDisplay = (props) => {
+    console.log(props.array);
+    return (
+      <div>
+        {props.array.map((babyElm, index) => (
+          <>
+            {/* <button className={babyElm.sex}>{babyElm.name}</button> */}
+            <button
+              className={classNameGender(babyElm.sex)}
+              key={index}
+              onClick={() => handleReturnFavourite(index)}
+            >
+              {babyElm.name} {symbolGender(babyElm.sex)}
+            </button>
+          </>
+        ))}
+      </div>
+    );
   };
   return (
     <div className="container">
@@ -119,20 +144,27 @@ export default function ExtractingBabyName() {
         <label className="btn btn-outline-primary" for="btnradio2">
           {symbolGender("f")}
         </label>
+        <input
+          type="radio"
+          className="btn-check"
+          name="btnradio"
+          onClick={getRadioValue}
+          value=""
+          id="btnradio3"
+        />
+        <label className="btn btn-outline-primary" for="btnradio3">
+          All
+        </label>
       </div>
       {/* < favouritesArray={favouritesArray} /> */}
       <div className="favouritesContainer">
         Favourite Names(Click):
-        {favouritesArray.map((babyElm, index) => (
-          // <button className={elm.sex}>{elm.name}</button>
-          <button
-            className={classNameGender(babyElm.sex)}
-            key={index}
-            onClick={() => handleReturnFavourite(index)}
-          >
-            {babyElm.name} {symbolGender(babyElm.sex)}
-          </button>
-        ))}
+        {/* <FavouriteDisplay array={favouritesArray} /> */}
+        {filterGender ? (
+          <FavouriteDisplay array={favouritesArrayFilter} />
+        ) : (
+          <FavouriteDisplay array={favouritesArray} />
+        )}
         <hr />
       </div>
       {babyNamesArray.map((babyElm, index) => (
